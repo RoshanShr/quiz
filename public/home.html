@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+      integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8="
+      crossorigin="anonymous"></script>
+  </head>
+  <body id="body_section">
+    <div id="first_section">
+      <p>Do you want to participate in quiz?</p>
+      <button id="yes_btn" onclick="fetchData()">Yes</button>
+      <button>No</button>
+    </div>
+    <div id="question_section" style="display: none;">
+      <h4 id="quesiton">asdasdds</h4>
+      <div id="options">
+        <select id="option_select">
+
+        </select>
+      </div>
+    </div>
+  </body>
+</html>
+<script>
+  var marks = 0;
+ let j = 0;
+
+  var question = [];
+  var question_index = [];
+   function fetchData() {
+    fetch('http://localhost:3000/takeQuiz')
+    .then(function (response) {
+      if (response.status !== 200) {
+        console.log(
+          'Looks like there was a problem. Status Code: ' + response.status
+        );
+        return;
+      }
+      response.json().then(function (data) {
+        question = data.results;
+        poppulateQuestion(0);
+        debugger;
+       
+      });
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+}
+function poppulateQuestion(j){
+
+  $('#first_section').css('display', 'none');
+        $('#question_section').css('display', 'block')
+        var option_html= '';
+        let options  = question[j]['incorrect_answers'];
+        debugger;
+        if(question[j].type == 'multiple'){
+          option_html+=`<option value="${question[j]['correct_answer']}">${question[j]['correct_answer']}</option>`;
+          options.forEach((e,ind,a)=>{
+            debugger;
+            option_html+=`<option value="${e}">${e}</option>`;
+          })
+
+        }else if(question.type == 'boolean'){
+            var option_html ='<option value="True">True</option><option value="Falese">Falese</option>'
+        }
+        $('#quesiton').html(question[j]['question'])
+        $('#option_select').html(option_html);
+                $('#options').append(`<button onclick="poppulateQuestion(${j})">Submit answer</button>`);
+                j++;
+        debugger;
+
+}
+
+// function SubmitAnswer(){
+//   poppulateQuestion()
+// }
+</script>

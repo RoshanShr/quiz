@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
+            integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8="
+            crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <p>Do you want to participate in quiz?</p>
+        <button id="yes_btn" onclick="fetchData()">Yes</button>
+        <button>No</button>
+    </body>
+</html>
+
+<script>
+   function fetchData() {
+  fetch('localhost:3000/takeQuiz')
+    .then(function (response) {
+      if (response.status !== 200) {
+        console.log(
+          'Looks like there was a problem. Status Code: ' + response.status
+        );
+        return;
+      }
+      response.json().then(function (data) {
+        console.log(data);
+        document.getElementById('w3review').value = data;
+      });
+    })
+    .catch(function (err) {
+      console.log('Fetch Error :-S', err);
+    });
+}
+</script>
