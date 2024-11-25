@@ -13,16 +13,15 @@ const path = require('path');
 //     .catch((err) => {
 //         console.log('Hello')
 //     })
-app.use(cors());
+//app.use(cors());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Route to trigger the redirect
 app.get('/home', (req, res) => {
-    res.redirect('./home.html'); // Redirects to example.html in the public folder
+    res.redirect('./home.html'); 
 });
 
-// Route to trigger the redirect
+
 app.get('/takeQuiz', (req, res) => {
     console.log("Taking quiz...")
     fetch("https://opentdb.com/api.php?amount=10")
@@ -35,10 +34,15 @@ app.get('/takeQuiz', (req, res) => {
     .catch((err) => {
         console.log('Hello')
     })
+
+});
+app.get('/cancelQuiz', (req, res) => {
+    res.send({message: "You didn't wish to participate in the quiz contest"})
+
 });
 
-// Start the server
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+
+
+app.listen(3000, () => {
+    console.log(`Server is running`);
 });

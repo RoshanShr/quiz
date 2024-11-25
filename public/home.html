@@ -11,26 +11,25 @@
   <body id="body_section">
     <div id="first_section">
       <p>Do you want to participate in quiz?</p>
-      <button id="yes_btn" onclick="fetchData()">Yes</button>
-      <button>No</button>
+      <button onclick="takeQuiz()">Yes</button>
+      <button onclick="cancelQuiz()">No</button>
     </div>
     <div id="question_section" style="display: none;">
-      <h4 id="quesiton">asdasdds</h4>
+      <h4 id="quesiton"></h4>
       <div id="options">
         <select id="option_select">
-
         </select>
       </div>
     </div>
   </body>
 </html>
 <script>
-  var marks = 0;
- let j = 0;
-
+  let marks = 0;
+  let j = 0;
   var question = [];
   var question_index = [];
-   function fetchData() {
+
+  function takeQuiz() {
     fetch('http://localhost:3000/takeQuiz')
     .then(function (response) {
       if (response.status !== 200) {
@@ -41,8 +40,28 @@
       }
       response.json().then(function (data) {
         question = data.results;
-        poppulateQuestion(0);
-        debugger;
+        populateQuestion();
+      });
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+}
+
+
+// Do not need to this but still doing it fetching the request
+function cancelQuiz() {
+    fetch('http://localhost:3000/cancelQuiz')
+    .then(function (response) {
+      if (response.status !== 200) {
+        console.log(
+          'Looks like there was a problem. Status Code: ' + response.status
+        );
+        return;
+      }
+      response.json().then(function (data) {
+        let message = data.message;
+        alert(message);
        
       });
     })
@@ -50,32 +69,36 @@
       console.log(err);
     });
 }
-function poppulateQuestion(j){
 
-  $('#first_section').css('display', 'none');
+function populateQuestion(){
+       $('#first_section').css('display', 'none');
         $('#question_section').css('display', 'block')
         var option_html= '';
         let options  = question[j]['incorrect_answers'];
-        debugger;
         if(question[j].type == 'multiple'){
           option_html+=`<option value="${question[j]['correct_answer']}">${question[j]['correct_answer']}</option>`;
           options.forEach((e,ind,a)=>{
-            debugger;
             option_html+=`<option value="${e}">${e}</option>`;
           })
-
-        }else if(question.type == 'boolean'){
-            var option_html ='<option value="True">True</option><option value="Falese">Falese</option>'
+        }else if(question[j].type == 'boolean'){
+           option_html ='<option value="True">True</option><option value="False">False</option>'
         }
         $('#quesiton').html(question[j]['question'])
+        if(j!=0){
+          checkAnswer($('#option_select').val(), j-1)
+        }
+     
         $('#option_select').html(option_html);
-                $('#options').append(`<button onclick="poppulateQuestion(${j})">Submit answer</button>`);
-                j++;
-        debugger;
+        $('#options').append(`<button id="btn_${j}" onclick="populateQuestion(${j})">Submit answer</button>`);
+        if(j!=0){
+          $(`#btn_${j}`).remove();
+        }
+        j++;
 
 }
 
-// function SubmitAnswer(){
-//   poppulateQuestion()
-// }
+function checkAnswer(sel_ans, q_num){
+  console.log(sel_ans, q_num);
+ // poppulateQuestion()
+}
 </script>
