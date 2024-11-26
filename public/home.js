@@ -102,7 +102,7 @@ function populateOptions() {
         options.push(question[j]['correct_answer']);
 
         let shuffle_options = options.sort();
-        options.forEach((e, ind, a) => {
+        shuffle_options.forEach((e, ind, a) => {
             option_html += `<option value="${e}">${e}</option>`;
         })
     } else if (question[j].type == 'boolean') {
