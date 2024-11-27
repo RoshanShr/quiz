@@ -31,21 +31,20 @@ class Quiz {
         }
     }
 
-    cancelQuiz() {
-        fetch('http://localhost:3000/cancelQuiz')
-            .then(response => {
-                if (response.status !== 200) {
-                    console.error('Looks like there was a problem. Status Code:', response.status);
-                    return;
-                }
-                return response.json();
-            })
-            .then(data => {
-                alert(data.message);
-            })
-            .catch(err => {
-                console.error(err);
-            });
+    async cancelQuiz() {
+        try {
+            const response = await fetch('http://localhost:3000/cancelQuiz');
+            if (response.status !== 200) {
+                console.error('Looks like there was a problem. Status Code:', response.status);
+                return;
+            }
+            const data = await response.json();
+            alert(data.message)
+        } catch (err) {
+            console.error(err);
+        }
+
+    
     }
 
     populateQuestion() {
